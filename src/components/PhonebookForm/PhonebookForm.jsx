@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Button from '../Button';
+import { FormWrapper, Label, Input } from './PhonebookForm.styled';
 
 const INITIAL_STATE = {
   name: '',
@@ -24,39 +26,38 @@ class PhonebookForm extends Component {
   };
 
   render() {
+    const { handleSubmit, handleInputChange } = this;
+    const { number, name } = this.state;
+
     return (
-      <form
-        autoComplete="off"
-        name="phonebook-form"
-        onSubmit={this.handleSubmit}
-      >
-        <fieldset>
-          <label>
+      <form autoComplete="off" onSubmit={handleSubmit}>
+        <FormWrapper>
+          <Label>
             Name
-            <input
+            <Input
               type="text"
               name="name"
               pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
               title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
               required
-              value={this.state.name}
-              onChange={this.handleInputChange}
+              value={name}
+              onChange={handleInputChange}
             />
-          </label>
-          <label>
-            Number
-            <input
+          </Label>
+          <Label>
+            Phone number
+            <Input
               type="tel"
               name="number"
               pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
               title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
               required
-              value={this.state.number}
-              onChange={this.handleInputChange}
+              value={number}
+              onChange={handleInputChange}
             />
-          </label>
-          <button type="submit">Add contact</button>
-        </fieldset>
+          </Label>
+          <Button label="Add contact" type="submit" />
+        </FormWrapper>
       </form>
     );
   }

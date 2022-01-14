@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
-import './App.styled.jsx';
+import toast, { Toaster } from 'react-hot-toast';
 import PhonebookForm from './components/PhonebookForm';
-import Contacts from './components/Contacts';
-import Title from './components/Title';
+import ContactsList from './components/ContactsList';
 import Filter from './components/Filter';
+import { Container, MainTitle, Title, Message } from './App.styled';
 
 class App extends Component {
   state = {
@@ -13,14 +13,28 @@ class App extends Component {
   };
 
   addContact = ({ name, number }) => {
+    const { contacts } = this.state;
     const contact = {
       name,
       number,
       id: nanoid(),
     };
-    this.setState(prevState => ({
-      contacts: [...prevState.contacts, contact],
-    }));
+
+    contacts.some(contact => contact.name === name)
+      ? toast.error(`${name} is already in contacts`)
+      : this.setState(prevState => ({
+          contacts: [...prevState.contacts, contact],
+        }));
+  };
+
+  deleteContact = contactId => {
+    const { contacts } = this.state;
+
+    this.setState({
+      contacts: contacts.filter(contact => contact.id !== contactId),
+    });
+
+    toast.success('Selected contact deleted');
   };
 
   changeFilter = e => {
@@ -28,21 +42,40 @@ class App extends Component {
     this.setState({ filter: value });
   };
 
-  render() {
-    const normalizedFilter = this.state.filter.toLocaleLowerCase();
-    const filteredContacts = this.state.contacts.filter(contact =>
+  getFilteredContacts = () => {
+    const { filter, contacts } = this.state;
+    const normalizedFilter = filter.toLowerCase();
+
+    return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter),
     );
-    console.log(filteredContacts);
+  };
+
+  render() {
+    const { addContact, changeFilter, deleteContact } = this;
+    const { filter, contacts } = this.state;
+    const filteredContacts = this.getFilteredContacts();
 
     return (
-      <>
-        <Title title="Phonebook" />
-        <PhonebookForm onSubmit={this.addContact} />
-        <Title title="Contacts" />
-        <Filter value={this.state.filter} onChange={this.changeFilter} />
-        <Contacts contacts={filteredContacts} />
-      </>
+      <Container>
+        <div>
+          <Toaster />
+        </div>
+        <MainTitle>Phonebook</MainTitle>
+        <PhonebookForm onSubmit={addContact} />
+        {contacts.length === 0 ? (
+          <Message>Your phone book is empty, enter your first contact!</Message>
+        ) : (
+          <>
+            <Title>Contacts</Title>
+            <Filter value={filter} onChange={changeFilter} />
+            <ContactsList
+              contacts={filteredContacts}
+              onDeleteContact={deleteContact}
+            />
+          </>
+        )}
+      </Container>
     );
   }
 }
