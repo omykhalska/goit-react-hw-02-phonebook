@@ -30,7 +30,6 @@ class PhonebookForm extends Component {
         name="phonebook-form"
         onSubmit={this.handleSubmit}
       >
-        <h1>Phonebook</h1>
         <fieldset>
           <label>
             Name

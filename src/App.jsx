@@ -3,12 +3,13 @@ import { nanoid } from 'nanoid';
 import './App.styled.jsx';
 import PhonebookForm from './components/PhonebookForm';
 import Contacts from './components/Contacts';
+import Title from './components/Title';
+import Filter from './components/Filter';
 
 class App extends Component {
   state = {
     contacts: [],
-    name: '',
-    number: '',
+    filter: '',
   };
 
   addContact = ({ name, number }) => {
@@ -22,12 +23,25 @@ class App extends Component {
     }));
   };
 
+  changeFilter = e => {
+    const { value } = e.currentTarget;
+    this.setState({ filter: value });
+  };
+
   render() {
+    const normalizedFilter = this.state.filter.toLocaleLowerCase();
+    const filteredContacts = this.state.contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter),
+    );
+    console.log(filteredContacts);
+
     return (
       <>
+        <Title title="Phonebook" />
         <PhonebookForm onSubmit={this.addContact} />
-        <h2>Contacts</h2>
-        <Contacts contacts={this.state.contacts} />
+        <Title title="Contacts" />
+        <Filter value={this.state.filter} onChange={this.changeFilter} />
+        <Contacts contacts={filteredContacts} />
       </>
     );
   }
