@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { CommonBtn } from './Button.styled';
 
 function Button({ label, onClick = () => null, type = 'button' }) {
@@ -8,5 +9,10 @@ function Button({ label, onClick = () => null, type = 'button' }) {
     </CommonBtn>
   );
 }
+Button.propTypes = {
+  label: PropTypes.string,
+  onClick: PropTypes.func,
+  type: PropTypes.string,
+};
 
 export default Button;

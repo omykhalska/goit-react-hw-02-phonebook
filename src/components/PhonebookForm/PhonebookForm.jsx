@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Button from '../Button';
 import { FormWrapper, Label, Input } from './PhonebookForm.styled';
 
@@ -62,5 +63,9 @@ class PhonebookForm extends Component {
     );
   }
 }
+
+PhonebookForm.propTypes = {
+  onSubmit: PropTypes.func,
+};
 
 export default PhonebookForm;
