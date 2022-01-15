@@ -9,6 +9,10 @@ const INITIAL_STATE = {
 };
 
 class PhonebookForm extends Component {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+  };
+
   state = { ...INITIAL_STATE };
 
   handleSubmit = e => {
@@ -63,9 +67,5 @@ class PhonebookForm extends Component {
     );
   }
 }
-
-PhonebookForm.propTypes = {
-  onSubmit: PropTypes.func,
-};
 
 export default PhonebookForm;
